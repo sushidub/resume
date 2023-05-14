@@ -1,0 +1,6 @@
+.DS_Store
+*.code-workspace
+notes.md
+output/
+scripts/data.json
+image/my-sig*

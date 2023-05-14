@@ -1,0 +1,43 @@
+$font-styles: ('Thin':100, 'ExtraLight':200, 'Light':300, 'Regular':400, 'Medium':500, 'Semibold':600, 'Bold':700);
+
+$font-family:                       'IBM Plex Sans';
+$font-directory:                    'IBM_Plex_Sans';
+$font-name:                         'IBMPlexSans';
+$font-formats:                      ('truetype':'ttf');
+$font-display:                      swap;
+
+@function createFormatUrls($style) {
+  $format-dir: ();
+  @each $format in map_keys($font-formats) {
+    $file-ext: map_get($font-formats, $format);
+    
+    $format-dir: append($format-dir, url("#{$font-directory}/#{$font-name}-#{$style}.#{$file-ext}") format("#{$format}"), comma);
+  }
+  @return $format-dir;
+}
+
+@each $style in map_keys($font-styles) {
+  $weight: map_get($font-styles, $style);
+  
+  /* #{$weight} : #{$font-family} #{$style} */
+  @font-face {
+    font-family: $font-family;
+    src: createFormatUrls($style);
+    font-weight: $weight;
+    font-style: normal;
+    font-display: $font-display;
+  }
+
+  @if $style == 'Regular' {
+    $style: '';
+  }
+
+  /* #{$weight} : #{$font-family} #{$style}Italic */
+  @font-face {
+    font-family: $font-family;
+    src: createFormatUrls($style + Italic);
+    font-weight: $weight;
+    font-style: italic;
+    font-display: $font-display;
+  }
+}

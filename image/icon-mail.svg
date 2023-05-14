@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="svg-icon icon-mail" width="50" height="50" x="0" y="0" viewBox="0 0 50 36" focusable="false" role="presentation" shape-rendering="geometricPrecision" preserveAspectRatio="xMidYMid meet">>
+  <rect class="svg-rect" width="48" height="34" fill="transparent" stroke="currentColor" stroke-width="2" x="1" y="1" rx="2.5" ry="2.5"/>
+  <line class="svg-line" x1="5.04" x2="25.024" y1="10.109" y2="21.329" stroke-width="2" stroke-linecap="round" stroke="currentColor" />
+  <line class="svg-line" x1="25.024" x2="43.716" y1="21.329" y2="10.109" stroke-linecap="round" stroke-width="2" stroke="currentColor" />
+</svg>

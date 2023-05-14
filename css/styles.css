@@ -1,0 +1,477 @@
+/*
+ * UNIT Conversion
+ * 1pt = 1/72th of 1in
+ * 1in = 2.54cm = 96px
+ * 1px = 1/96th of 1in
+ *
+ * Column Widths
+ * 1.875
+ * 0.125 gutter
+ * 5.0
+ *
+ * Ref Codes: https://www.toptal.com/designers/htmlarrows/punctuation/
+ * non-breaking space = "\00A0"
+ * comma = "\002C"
+ */
+
+body, article, div, dl, dt, dd, h1, h2, h3, h4, h5, h6, p, pre, code, blockquote {
+  margin:0;
+  padding:0;
+  border-width:0;
+}
+body {
+  position: relative;
+  font-family: var(--font-family, sans-serif), "Arial", sans-serif;
+  color: var(--color-text, #111);
+}
+hr {
+  border: none;
+}
+a,a:link,a:visited,a:hover,a:focus {
+  text-decoration: none;
+  color: currentColor;
+}
+h5.title {
+  font-weight: 400;
+  font-size: 9pt;
+  line-height: 14pt;
+}
+header .applicant {
+  font-weight: normal;
+  font-size: 17pt;
+  line-height: 16pt;
+  margin-top: 0.035in;
+}
+header address {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0.15in;
+}
+header address > div {
+  display: inline-block;
+  flex: 1 1 auto;
+}
+header address [role],
+a[role="link"] {
+  display: block;
+  height: 0.15in;
+  font-weight: 300;
+  font-size: 9pt;
+  font-style: normal;
+  line-height: 13pt;
+  margin: 0.035in 0;
+}
+.role {
+  width: var(--content-main-w);
+  margin-top: 0.3in;
+  font-weight: 300;
+  font-size: 20pt;
+  line-height: 16pt;
+}
+.icon {
+  position: relative;
+  padding-left: 0.2in;
+}
+.icon::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: contain;
+  width: 0.16in;
+  height: 0.16in;
+  display: inline-block;
+}
+.icon-mail::before {
+  bottom: -0.03in;
+  background-image: url("/image/icon-mail.svg");
+}
+.icon-linkedIn::before {
+  bottom: -0.04in;
+  background-size: 85%;
+  background-image: url("/image/icon-linkedIn.svg");
+}
+.icon-github::before {
+  background-size: 85%;
+  bottom: -0.03in;
+  background-image: url("/image/icon-github.svg");
+}
+.icon-dribbble::before {
+  background-size: 85%;
+  bottom: -0.02in;
+  background-image: url("/image/icon-dribbble.svg");
+}
+.icon-phone::before {
+  bottom: -0.01in;
+  background-image: url("/image/icon-phone.svg");
+}
+.icon-pin::before {
+  left: 0.04in;
+  bottom: -0.03in;
+  background-image: url("/image/icon-pin.svg");
+}
+.icon-jg::before {
+  bottom: -0.04in;
+  background-size: 83%;
+  background-image: url("/image/icon-jg.svg");
+}
+section {
+  hyphens: manual;
+  -epub-hyphens:manual;
+}
+p {
+  margin-bottom:0;
+  margin-left:0;
+  margin-right:0;
+  margin-top: 0;
+  font-weight: 300;
+  font-size:8.5pt;
+  line-height: 14pt; /* 1.778 */
+  font-style:normal;
+  font-variant:normal;
+  hyphens: none;
+  -epub-hyphens:none;
+  orphans:1;
+  page-break-after:auto;
+  page-break-before:auto;
+  text-align:left;
+  text-decoration:none;
+  text-indent:0;
+  text-transform:none;
+  widows:1;
+}
+p:not(:first-of-type) {
+  margin-top: 0.0625in;
+}
+section h3 {
+  display: block;
+  font-weight: 400;
+  font-size: 12pt;
+  line-height: 16pt;
+}
+article:not(:last-of-type) {
+  margin-bottom: 0.25in;
+}
+aside[type="inline"] {
+  float: right;
+  padding-bottom: 0.15in;
+  padding-left: 0.40in;
+  max-width: 25%;
+}
+aside[type="inline"] > .title {
+  padding-left: 0.05in;
+  font-style: italic;
+  font-size: 9pt;
+  line-height: 13pt;
+}
+aside[type="side"] {
+  float: left;
+}
+aside[type="side"] > .title {
+  font-size: 10pt;
+  line-height: 16pt;
+}
+aside > .title {
+  font-weight: 500;
+}
+.page {
+  position: relative;
+  width: var(--page-width, 8.5in);
+  height: var(--page-height, 11in);
+  margin: 0 auto;
+  padding-top: var(--page-margin-v, 0.5in);
+  padding-bottom: var(--page-margin-v, 0.5in);
+  padding-left: var(--page-margin-h, 0.75in);
+  padding-right: var(--page-margin-h, 0.75in);
+  border: none;
+}
+.page-content {
+  overflow: hidden;
+  box-sizing: content-box;
+  width: 100%;
+  height: 100%;
+  border-bottom: none;
+}
+.page-content.overflow {
+  overflow-y: scroll;
+}
+.page.outline {
+  border: 1px solid var(--color-black);
+}
+.overflow-line {
+  position: absolute;
+  z-index: 900;
+  display: block;
+  top: calc(100% - var(--page-margin-v, 0.5in));
+  right: var(--page-margin-h, 0.5in);
+  width: var(--content-main-w);
+  height: 1px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px dashed var(--color-coral);
+}
+.overflow-line::after {
+  content: "";
+  cursor: row-resize;
+  z-index: 1000;
+  display: block;
+  position: absolute;
+  right: -32px;
+  top: -10px;
+  bottom: -10px;
+  width: 30px;
+  border-bottom-left-radius: 1px;
+  border-top-left-radius: 1px;
+  border-bottom-right-radius: 13px;
+  border-top-right-radius: 13px;
+  background-color: var(--color-coral);
+}
+.overflow-line.at-start {
+  border-bottom-color: var(--color-turq);
+}
+.overflow-line.at-start::after {
+  background-color: var(--color-turq);
+}
+.column-layout {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  gap: var(--content-gutter-w);
+  margin-top: 0.25in;
+}
+.column-layout > :first-child {
+  flex: 0 0 var(--content-side-w);
+}
+.column-layout > :last-child {  
+  flex: 0 0 var(--content-main-w);
+}
+.span-layout {
+  width: var(--content-main-w);
+  margin-top: 0.25in;
+  margin-left: auto;
+}
+.experience .header .small {
+  font-weight: 300;
+  font-size: 7pt;
+  line-height: 16.5pt;
+}
+.experience .header > .position,
+.experience .header > .company,
+.experience .header > .location,
+.experience .header > .date {}
+.experience .header > .position {
+  font-weight: 500;
+  font-size: 12pt;
+  line-height: 16.5pt;
+}
+.experience .header > .position::after {
+  content: "\002C";
+  font-weight: 400;
+}
+.experience .header > .company {
+  font-weight: 400;
+}
+.experience .header > .company::after {
+  content: " | ";
+  font-weight: 300;
+}
+.experience .header > .location {
+  font-weight: 300;
+  font-size: 9pt;
+  line-height: 16pt;
+}
+.experience .header > .date {
+  display: block;
+  font-weight: 400;
+  font-size: 9pt;
+  line-height: 16pt;
+}
+.skills {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 12px;
+}
+.skills .keywords {
+  flex: 1 1 50%;
+  list-style-type: none;
+  font-weight: 300;
+  font-size: 8.5pt;
+  line-height: 14pt;
+  hyphens: manual;
+  -epub-hyphens:manual; 
+}
+.skills .keywords::before {
+  content: attr(data-title);
+  display: block;
+  font-weight: 500;
+  font-size: 9pt;
+  line-height: 14pt;
+}
+.skills .keywords > li {
+  display: inline;
+}
+.skills .keywords > li:not(:last-of-type)::after {
+  content: ", ";
+}
+.skills .keywords[data-title="Applied"] > li:last-of-type::after {
+  content: ".";
+}
+.client-roster > li {
+  padding-left: 0.05in;
+  margin: 0.025in 0;
+}
+.client-roster > li::marker {
+  font-weight: 300;
+  font-size: 5pt;
+}
+.accolade {
+  display: block;
+  margin: 0.1in 0;
+}
+.accolade > cite {
+  font-weight: 300;
+  font-size: 8.5pt;
+  line-height: 10pt;
+}
+.client-roster > li {
+  font-weight: 300;
+  font-size: 8pt;
+  line-height: 10pt;
+}
+.bar {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  padding-top: 0.1125in;
+}
+.bar::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 0.02in;
+  max-height: 0.02in;
+  background-color: #333;
+}
+.bar-side::before {
+  width: 0.25in;
+}
+.document-date {
+  display: none;
+  position: absolute;
+  font-family: monospace;
+  color: #CCC;
+  right: 20px;
+  bottom: 20px;
+}
+
+.help {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 5px;
+  background-color: black;
+  color: white;
+  font-size: 0.75rem;
+}
+.help input {
+  appearance: none;
+  background-color: white;
+  color: black;
+  border: none;
+  margin-right: 1rem;
+  padding: 1px 5px;
+}
+.help input[type="number"] {
+  width: 50px;
+}
+.help input.toggle-button {
+  background-color: var(--color-black, black);
+  color: var(--color-white, white);
+}
+.page-markers,
+.guides {
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: var(--page-width, 8.5in);
+  height: 100%;
+  min-height: var(--page-height, 11in);
+  margin: 0 auto;
+}
+.page-markers {
+  counter-reset: pageNum;
+  width: 100%;
+}
+.page-markers > .page-marker {
+  counter-increment: pageNum;
+  position: inherit;
+  z-index: 10;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-coral, red);
+  text-align: left;
+}
+.page-markers > .page-marker::before {
+  content: counter(pageNum);
+  font-size: 1rem;
+  position: relative;
+  top: -20px;
+  left: 5px;
+  color: var(--color-coral, red);
+}
+.guides > .guide {
+  position: inherit;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-cyan, green);
+}
+.guides > .guide::after {
+  content: attr(data-content);
+  position: inherit;
+  display: inline-block;
+  left: 0;
+  top: 0;
+  font-size: 0.5rem;
+  color: var(--color-cyan, green);
+  padding: 1px;
+  background-color: white;
+}
+.guides > .guide.guide-label-pos-l::after {
+  transform: translate(-120%, 10px);
+}
+.guides > .guide.guide-label-pos-r::after {
+  transform: translate(100%, 10px);
+}
+.guides > .guide.guide-label-pos-m::after {
+  transform: translate(-50%, 10px);
+}
+[contenteditable]:focus-visible {
+  background-color: #FAFAFA;
+  outline-color: var(--color-coral, red);
+  outline-style: solid;
+  outline-offset: -1px;
+  outline-width: 2px;
+}
+::selection { 
+  color: var(--color-bg);
+  background-color: var(--color-text);
+}

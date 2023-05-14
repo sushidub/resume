@@ -1,0 +1,11 @@
+.no-print {
+  display: none;
+}
+.outline {
+  border: none !important;
+  border-bottom: none !important;
+}
+:focus-visible {
+  background-color: initial;
+  outline: none;
+}
