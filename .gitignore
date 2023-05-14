@@ -1,6 +1,7 @@
 .DS_Store
 *.code-workspace
 notes.md
+reader.html
 output/
 scripts/data.json
 image/my-sig*

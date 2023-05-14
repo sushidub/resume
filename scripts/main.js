@@ -11,6 +11,7 @@ console.info('%cmain.js', debug.fn);
 const _ele = {
   padPage: document.getElementById('padPage1'),
   preview: document.getElementById('documentPreview'),
+  exportButtons: document.querySelectorAll('.export-button'),
   page: document.querySelector('.page'),
   pages: document.querySelectorAll('.page'),
   pageContent: document.querySelectorAll('.page-content'),
@@ -84,6 +85,19 @@ function previewHandler() {
   return true;
 }
 
+function exportHandler() {
+  console.info('%cfn: exportHandler,\n%o', debug.fn, this);
+  const exportType = this.dataset.exportType;
+  switch(exportType) {
+    case 'json':
+      return;
+    case 'pdf':
+      return;
+    case 'txt':
+      return;
+  }
+}
+
 function toggleButtonHandler(e) {
   console.info('%cfn: toggleButtonHandler\ne: %o\nkeycode: %s', debug.fn, e, this.dataset.keycode);
   const triggerKeyEvent = new KeyboardEvent('keydown', {
@@ -118,6 +132,7 @@ function init() {
       new Draggable(line, `line${idx}`, [_ele.padPage]);
     });
     _ele.toggleButtons.forEach(button => button.addEventListener('click', toggleButtonHandler));
+    _ele.exportButtons.forEach(button => button.addEventListener('click', exportHandler));
   });
 }
 

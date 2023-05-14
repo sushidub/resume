@@ -14,9 +14,11 @@ class HeaderSection extends HTMLElement {
       const parser = new DOMParser();
       const header = parser.parseFromString(res, 'text/html');
       const template = header.getElementById('header-section-template').content.cloneNode(true);
-
+      ['applicant', 'phone', 'email', 'address1', 'address2'].forEach(item => {
+        console.log(this._data[item]);
+        template.querySelector(`[role="${item}"]`).textContent = this._data[item];
+      });
       if (this._data.role) template.querySelector('.content').append(this.createRoleNode(this._data.role));
-    
       if (this._data.links) template.querySelector('.links').append(this.createLinkNodes(this._data.links));
       this.replaceWith(template);
       // console.dir(this);
@@ -60,8 +62,13 @@ export default function renderHeader(data) {
 
   contentPlaceholder.forEach(place => {
     place._data = {
-      "role": data.role,
-      "links": data.links
+      'role': data.role,
+      'links': data.links,
+      'applicant': data.applicant,
+      'phone': data.phone,
+      'email': data.email,
+      'address1': data.address1,
+      'address2': data.address2 
     };
     if (place.hasAttributes) {
       for (const attr of place.attributes) {
