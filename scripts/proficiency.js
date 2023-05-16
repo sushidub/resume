@@ -25,10 +25,31 @@ class ProficiencySection extends HTMLElement {
       this._data.categories.forEach(cat => {
         template.querySelector('article').append(this.createCategoryList(cat));
       });
+      
+      if (this._data.description && this._data.description.length > 0) {
+        template.querySelector('article').append(this.createDescriptionNodes(this._data.description));
+      }
 
       template.querySelector('section').classList.add(`${this._layout}-layout`);
       this.replaceWith(template);
     });
+  }
+
+  createDescriptionNodes(data) {
+    const fragment = new DocumentFragment();
+    data.forEach(item => {
+      let descriptionItem;
+      if (item.startsWith("•")) {
+        item = item.split('• ')[1];
+        console.log(item);
+        descriptionItem = Create_New_Element('p', {'class': 'list-item'});
+      } else {
+        descriptionItem = Create_New_Element('p');
+      }
+      descriptionItem.textContent = item;
+      fragment.append(descriptionItem);
+    });
+    return fragment;
   }
 
   createSectionTitle(data) {
@@ -53,9 +74,10 @@ class ProficiencySection extends HTMLElement {
       'class': 'keywords'
     });
 
-    data.keywords.forEach(word => {
+    const limit = data.keywords.length - 1;
+    data.keywords.forEach((word, idx) => {
       const listItemNode = Create_New_Element('li');
-      listItemNode.textContent = word;
+      listItemNode.textContent = idx === limit ? `${word}` : `${word}, `;
       newNode.append(listItemNode);
     });
 

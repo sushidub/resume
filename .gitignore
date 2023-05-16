@@ -2,6 +2,7 @@
 *.code-workspace
 notes.md
 reader.html
+data/
 output/
 scripts/data.json
 image/my-sig*

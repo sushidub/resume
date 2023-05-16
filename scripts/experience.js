@@ -24,6 +24,7 @@ class ExperienceItem extends HTMLElement {
       }
 
       template.querySelector('section').classList.add(`${this._layout}-layout`);
+      console.log(this);
 
       if (this._data.aside) {
         let asideEle;
@@ -49,7 +50,7 @@ class ExperienceItem extends HTMLElement {
         template.querySelector('article').append(this.createDescriptionNodes(this._data.description));
       }
 
-      if (this._overflow) template.querySelector('.header').remove();
+      if (this._overflow === "true") template.querySelector('.header').remove();
 
       this.replaceWith(template);
     });
@@ -58,7 +59,14 @@ class ExperienceItem extends HTMLElement {
   createDescriptionNodes(data) {
     const fragment = new DocumentFragment();
     data.forEach(item => {
-      const descriptionItem = Create_New_Element('p');
+      let descriptionItem;
+      if (item.startsWith("•")) {
+        item = item.split('• ')[1];
+        console.log(item);
+        descriptionItem = Create_New_Element('p', {'class': 'list-item'});
+      } else {
+        descriptionItem = Create_New_Element('p');
+      }
       descriptionItem.textContent = item;
       fragment.append(descriptionItem);
     });
@@ -148,6 +156,9 @@ export default function renderExperience(data) {
   const contentPlaceholders = document.querySelectorAll('experience-item'); // Nodelist
   const experienceItems = data.experience; // Array
   
+  const hidden = experienceItems.findIndex(item => item.hide === true);
+  if (hidden !== -1) experienceItems.splice(hidden, 1);
+
   if (!experienceItems || experienceItems.length === 0) {
     console.warn("experience items missing. see data.experience: %o", data.experience);
     return false;

@@ -8,6 +8,7 @@ import renderProficiency from './proficiency.js';
 
 console.info('%cmain.js', debug.fn);
 
+const _role = 'senior-frontend-developer';
 const _ele = {
   padPage: document.getElementById('padPage1'),
   preview: document.getElementById('documentPreview'),
@@ -110,7 +111,7 @@ function toggleButtonHandler(e) {
 }
 
 function init() {
-  let result = fetch('scripts/data.json').then((res) => {
+  let result = fetch(`/data/${_role}.json`).then((res) => {
     return res.json();
   });
   result.then((res) => {
