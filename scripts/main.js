@@ -1,8 +1,8 @@
 'use strict';
 
 import { debug } from './jshelprs.js';
-import Draggable from './Draggable.js';
-import renderHeader from './header.js';
+import renderPage from './page.js';
+import renderSummary from './summary.js';
 import renderExperience from './experience.js';
 import renderProficiency from './proficiency.js';
 
@@ -10,18 +10,30 @@ console.info('%cmain.js', debug.fn);
 
 const _role = 'senior-frontend-developer';
 const _ele = {
-  padPage: document.getElementById('padPage1'),
+  padPage: document.getElementById('padPage'),
   preview: document.getElementById('documentPreview'),
   exportButtons: document.querySelectorAll('.export-button'),
-  page: document.querySelector('.page'),
-  pages: document.querySelectorAll('.page'),
-  pageContent: document.querySelectorAll('.page-content'),
+  main: document.querySelector('main'),
   pageNumbers: document.querySelector('.page-markers'),
   overflowLines: document.querySelectorAll('.overflow-line'),
   guides: document.querySelector('.guides'),
   toggleButtons: document.querySelectorAll('.toggle-button')
 }
 const k = ['KeyG', 'KeyN', 'KeyP', 'KeyB', 'KeyO'];
+let _pageCount = 0;
+
+function exportHandler() {
+  console.info('%cfn: exportHandler,\n%o', debug.fn, this);
+  const exportType = this.dataset.exportType;
+  switch(exportType) {
+    case 'json':
+      return;
+    case 'pdf':
+      return;
+    case 'txt':
+      return;
+  }
+}
 
 function keys(e) {
   if (k.indexOf(e.code) === -1) return false;
@@ -51,6 +63,11 @@ function keys(e) {
       _ele.overflowLines.forEach(line => line.hidden = false);
       return;
   }
+}
+
+function newPage() {
+  _pageCount = _pageCount++;
+  return _pageCount;
 }
 
 function pagePaddingChangeHandler(e) {
@@ -86,19 +103,6 @@ function previewHandler() {
   return true;
 }
 
-function exportHandler() {
-  console.info('%cfn: exportHandler,\n%o', debug.fn, this);
-  const exportType = this.dataset.exportType;
-  switch(exportType) {
-    case 'json':
-      return;
-    case 'pdf':
-      return;
-    case 'txt':
-      return;
-  }
-}
-
 function toggleButtonHandler(e) {
   console.info('%cfn: toggleButtonHandler\ne: %o\nkeycode: %s', debug.fn, e, this.dataset.keycode);
   const triggerKeyEvent = new KeyboardEvent('keydown', {
@@ -114,24 +118,28 @@ function init() {
   let result = fetch(`/data/${_role}.json`).then((res) => {
     return res.json();
   });
-  result.then((res) => {
+  result.then(res => {
     console.log(res);
     if (res.role) {
       const role = res.role.split(' ').join('-');
       document.querySelector('title').textContent = `JGraston-Resume_${role}`;
     }
-    renderHeader(res);
-    if (res.summary) document.querySelector('.summary > p').textContent = res.summary;
-    renderExperience(res);
-    renderProficiency(res);
+    const page = renderPage(res, newPage());
+    return res;
+  }).then(res => {
+    console.log(res);
+    console.log(page.contentBottom());
+    if (res.summary && !document.querySelector('.summary')) {
+      renderSummary(res.summary);
+    }
+      // if (data.proficiency && !document.querySelector('.proficiency')) renderProficiency(data.proficiency);
+      // renderExperience(data);
+
+    // listeners
     window.addEventListener('keydown', keys, false);
-    _ele.padPage.value = _ele.page.computedStyleMap().get('padding-bottom').value;
     _ele.padPage.addEventListener('change', pagePaddingChangeHandler);
     _ele.padPage.addEventListener('focus', pagePaddingFocusHandler);
     _ele.preview.addEventListener('click', previewHandler);
-    _ele.overflowLines.forEach((line, idx) => {
-      new Draggable(line, `line${idx}`, [_ele.padPage]);
-    });
     _ele.toggleButtons.forEach(button => button.addEventListener('click', toggleButtonHandler));
     _ele.exportButtons.forEach(button => button.addEventListener('click', exportHandler));
   });

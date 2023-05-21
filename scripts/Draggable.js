@@ -3,36 +3,43 @@
 import { debug } from './jshelprs.js';
 
 export default class Draggable {
- 
-  constructor(ele, name = "", listeners = []) {
+  
+  /*
+   * Constructor arguments should include:
+   *    - draggable element target
+   *    - until an event bus is in place listener objects (i.e., listener element, drag element 
+   *      listen property) should be passed in as an array
+   *    - any directional constraints (e.g., up, down, left, right) during drag
+   */
+
+  constructor(ele, stage = {}, listeners = [], name = "") {
     console.info('%cclass: Draggable (%s)', debug.fn, name);
 
-    this.name = name;
     this.ele = ele;
+    this.name = name;
     this.listeners = listeners;
-    this.ele.onmousedown = this.onmousedown.bind(this);
-    this.movement = 0;
-    this.targetEle = this.ele.parentElement;
-    this.targetEleTop = this.targetEle.offsetTop;
-    this.lineEleTop = this.ele.offsetTop;
-    this.startPos = this.ele.offsetTop + this.targetEle.offsetTop;
-    this.startPad = this.targetEle.computedStyleMap().get('padding-bottom').value;
 
-    console.info(this);
+    for (const [key, value] of Object.entries(stage)) {
+      this[key] = value;
+    }
+
+    this.ele.onmousedown = this.onmousedown.bind(this);
+
+    console.info('%cclass: Draggable\n%o', debug.small, this);
+    
     this.ele.ondragstart = function() {
       return false;
     };
   }
 
-  onmousedown(event) {  
+  onmousedown(event) {
+    event.preventDefault();
+    
     console.info('%cfn: onmousedown', debug.fn);
+    this.updateListeners(event);
 
     const moveAt = (event) => {
-      // console.info('%cfn: moveAt', debug.fn);
-      this.ele.style.top = (event.pageY -  this.targetEleTop) + 'px';
-      track(event.pageY);
-      let padTotal = this.startPad + this.movement;
-      this.targetEle.style.paddingBottom = `${padTotal}px`;
+      this.updateListeners(event);
     }
 
     const onMove = (event) => {
@@ -40,43 +47,19 @@ export default class Draggable {
       moveAt(event);
     }
 
-    const track = (mouseY) => {
-      // console.info('%cfn: track', debug.fn);
-      this.movement = this.startPos - (this.ele.offsetTop + this.targetEle.offsetTop);
-      const trackMap = {
-        'name': this.name,
-        'movement': this.movement,
-        'mouse': mouseY,
-        'ele': this.ele.offsetTop + this.targetEle.offsetTop
-      }
-
-      if (trackMap.movement === 0) {
-        this.ele.classList.add('at-start');
-      } else {
-        this.ele.classList.remove('at-start');
-      }
-
-      // console.info('%o', trackMap);
-    }
-
     const onmouseup = (event) => {
       console.info('%cfn: onmouseup', debug.fn);
-      track(event.pageY)
       document.removeEventListener('mousemove', onMove);
       this.ele.onmouseup = null;
-      this.updateListeners(this.targetEle.computedStyleMap().get('padding-bottom').value);
+      this.updateListeners(event);
     };
   
     const onmouseout = (event) => {
       console.info('%cfn: onmouseout', debug.fn);
-      track(event.pageY);
       document.removeEventListener('mousemove', onMove);
       this.ele.onmouseout = null;
-      this.updateListeners(this.targetEle.computedStyleMap().get('padding-bottom').value);
+      this.updateListeners(event);
     }
-
-    track(event.pageY);
-    this.movement = 0;
     
     moveAt(event);
 
@@ -88,6 +71,8 @@ export default class Draggable {
   }
 
   updateListeners(val) {
-    this.listeners.forEach(listener => listener.value = val);
+    this.listeners.forEach(listener => {
+      listener.call(this, val);
+    });
   }
 }

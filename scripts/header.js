@@ -15,13 +15,11 @@ class HeaderSection extends HTMLElement {
       const header = parser.parseFromString(res, 'text/html');
       const template = header.getElementById('header-section-template').content.cloneNode(true);
       ['applicant', 'phone', 'email', 'address1', 'address2'].forEach(item => {
-        console.log(this._data[item]);
         template.querySelector(`[role="${item}"]`).textContent = this._data[item];
       });
       if (this._data.role) template.querySelector('.content').append(this.createRoleNode(this._data.role));
       if (this._data.links) template.querySelector('.links').append(this.createLinkNodes(this._data.links));
       this.replaceWith(template);
-      // console.dir(this);
     });
   }
 
@@ -55,27 +53,21 @@ class HeaderSection extends HTMLElement {
   }
 }
 
-export default function renderHeader(data) {
+export default function renderHeader(obj) {
   console.info('%cfn: renderHeader', debug.fn);
 
-  const contentPlaceholder = document.querySelectorAll('header-section'); // Nodelist
+  const contentPlaceholder = obj.template.querySelector('header-section'); // Nodelist
+  const data = obj.data;
 
-  contentPlaceholder.forEach(place => {
-    place._data = {
-      'role': data.role,
-      'links': data.links,
-      'applicant': data.applicant,
-      'phone': data.phone,
-      'email': data.email,
-      'address1': data.address1,
-      'address2': data.address2 
-    };
-    if (place.hasAttributes) {
-      for (const attr of place.attributes) {
-        place['_' + attr.name] = attr.value;
-      }
-    }
-  });
+  contentPlaceholder._data = {
+    'role': data.role,
+    'links': data.links,
+    'applicant': data.applicant,
+    'phone': data.phone,
+    'email': data.email,
+    'address1': data.address1,
+    'address2': data.address2 
+  };
 
-  return customElements.define('header-section', HeaderSection);
+  customElements.define('header-section', HeaderSection);
 }
