@@ -396,6 +396,9 @@ experience-item {
   text-align: right;
   font-family: monospace;
 }
+.block-pointer-events {
+  pointer-events: none;
+}
 
 .help {
   position: fixed;
