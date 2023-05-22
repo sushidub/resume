@@ -20,6 +20,7 @@
         --content-gutter-w: 0.125in;
         --content-main-w: 5in;
         --grid-division: 64px;
+        --utility-tray-h: 44px;
         --font-family: "IBM Plex Sans";
         --color-text: #111;
         --color-bg: #FFF;
@@ -33,6 +34,7 @@
   </head>
   <body>
     
+    <!-- guides -->
     <div class="page-markers no-print">
       <hr class="page-marker" style="top:calc(11in - 1px)" />
       <hr class="page-marker" style="top:calc(22in - 1px)" />
@@ -45,8 +47,10 @@
       <hr class="guide guide-label-pos-r" data-content="0.75in" style="right:var(--page-gutter)" />
       <hr class="guide guide-label-pos-m" data-content="8.5in" style="right:0" />
     </div>
-    <div class="page outline">
-      <hr class="overflow-line at-start no-print">
+
+    <!-- printable document -->
+    <page id="page1" class="page outline">
+      <hr class="overflow-line at-start no-print" data-overflow="null">
       <div class="page-content outline">
         <header-section></header-section>
         <section class="column-layout summary" contenteditable>
@@ -54,20 +58,21 @@
           <p></p>
         </section>
         <proficiency-section bar="true" layout="column" title="Proficiency"></proficiency-section>
-        <experience-item bar="true" layout="column" title="Experience"></experience-item>
+        <experience-item bar="true" layout="column" title="Experience" draggable="true"></experience-item>
       </div>
-    </div>
-    <div class="page outline">
-      <hr class="overflow-line at-start no-print">
+    </page>
+    <page id="page2" class="page outline">
+      <hr class="overflow-line at-start no-print" data-overflow="null">
       <div class="page-content outline">
         <header-section></header-section>
         <experience-item overflow="false" bar="true" layout="column" title="Experience con't..."></experience-item>
-        <experience-item layout="span"></experience-item>
-        <experience-item layout="span"></experience-item>
-        <experience-item layout="span"></experience-item>
+        <experience-item layout="span" draggable="true"></experience-item>
+        <experience-item layout="span" draggable="true"></experience-item>
+        <experience-item layout="span" draggable="true"></experience-item>
       </div>
-      <i class="date-modified">05/05/23</i>
-    </div>
+    </page>
+
+    <!-- helper utilities -->
     <div class="help no-print">
       <label>Mask
         <input type="number" id="padPage1" value="" step="5" />

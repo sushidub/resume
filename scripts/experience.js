@@ -16,6 +16,7 @@ class ExperienceItem extends HTMLElement {
       const parser = new DOMParser();
       const header = parser.parseFromString(res, 'text/html');
       const template = header.getElementById('experience-item-template').content.cloneNode(true);
+      
       // console.dir(this);
 
       if (this._bar && this._title) {
@@ -24,7 +25,6 @@ class ExperienceItem extends HTMLElement {
       }
 
       template.querySelector('section').classList.add(`${this._layout}-layout`);
-      console.log(this);
 
       if (this._data.aside) {
         let asideEle;
@@ -51,9 +51,14 @@ class ExperienceItem extends HTMLElement {
       }
 
       if (this._overflow === "true") template.querySelector('.header').remove();
-
-      this.replaceWith(template);
+      
+      this.append(template);
     });
+  }
+
+  connectedCallback() {
+    console.log('experience element added to page.\n%O', this);
+    this.dragdropListener(this);
   }
 
   createDescriptionNodes(data) {
@@ -147,6 +152,31 @@ class ExperienceItem extends HTMLElement {
 
     fragment.append(newNode);
     return fragment;
+  }
+
+  dragdropListener(ele) {
+    function dragstart_handler(ev) {
+      console.log(ev);
+      // Add the target element's id to the data transfer object
+      ev.dataTransfer.setData('text/html', ev.target.outerHTML);
+    }
+    function dragover_handler(ev) {
+      ev.preventDefault();
+      console.log(ev);
+      ev.dataTransfer.dropEffect = 'move';
+    }
+    function drop_handler(ev) {
+      ev.preventDefault();
+      console.log(ev);
+      // Get the id of the target and add the moved element to the target's DOM
+      const data = ev.dataTransfer.getData("text/plain");
+      console.log(data);
+      // ev.target.appendChild(document.getElementById(data));
+    }
+    console.log('%cfn: dragdropListener\n%O', debug.fn, ele);
+    ele.addEventListener('dragstart', dragstart_handler);
+    ele.addEventListener('dragover', dragover_handler);
+    ele.addEventListener('drop', drop_handler);
   }
 }
 

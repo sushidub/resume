@@ -1,5 +1,4 @@
 'use strict';
-
 import { debug } from './jshelprs.js';
 import Draggable from './Draggable.js';
 import renderHeader from './header.js';
@@ -8,7 +7,6 @@ import renderProficiency from './proficiency.js';
 
 console.info('%cmain.js', debug.fn);
 
-const _role = 'senior-frontend-developer';
 const _ele = {
   padPage: document.getElementById('padPage1'),
   preview: document.getElementById('documentPreview'),
@@ -21,35 +19,56 @@ const _ele = {
   guides: document.querySelector('.guides'),
   toggleButtons: document.querySelectorAll('.toggle-button')
 }
-const k = ['KeyG', 'KeyN', 'KeyP', 'KeyB', 'KeyO'];
+const _keyListeners = ['KeyG', 'KeyN', 'KeyP', 'KeyB', 'KeyO'];
+const _role = 'senior-frontend-developer';
+
+
+function getStyle(el, prop) {
+  return el.computedStyleMap().get(prop).value;
+}
+
+function getOverflow(el) {
+  console.info('%cfn: getOverflow', debug.fn);
+  const overflow = el.scrollHeight - el.clientHeight;
+  console.log('overflow: %d', overflow);
+  return overflow;
+}
 
 function keys(e) {
-  if (k.indexOf(e.code) === -1) return false;
+  if (_keyListeners.indexOf(e.code) === -1) return false;
   console.info('%cfn: keys', debug.fn);
 
   switch (e.code) {
     case 'KeyG':
       _ele.guides.hidden = !_ele.guides.hidden;
+      document.body.classList.remove('preview');
       return;
     case 'KeyN':
       _ele.pageNumbers.hidden = !_ele.pageNumbers.hidden;
+      document.body.classList.remove('preview');
       return;
     case 'KeyP':
       _ele.overflowLines.forEach(line => {
         line.hidden = !line.hidden;
       });
+      document.body.classList.remove('preview');
       return;
     case 'KeyB':
       _ele.pages.forEach(page => {
         page.classList.toggle('outline');
       });
+      document.body.classList.remove('preview');
       return;
     case 'KeyO':
       _ele.pageContent.forEach(page => {
         page.classList.toggle('overflow');
       });
       _ele.overflowLines.forEach(line => line.hidden = false);
+      document.body.classList.remove('preview');
       return;
+    default: {
+      document.body.classList.remove('preview');
+    }
   }
 }
 
@@ -76,6 +95,7 @@ function pagePaddingFocusHandler(e) {
 
 function previewHandler() {
   console.info('%cfn: previewHandler', debug.fn);
+  document.body.classList.add('preview');
   _ele.guides.hidden = true;
   _ele.pageNumbers.hidden = true;
   _ele.pages.forEach(page => page.classList.add('outline'));
@@ -83,6 +103,7 @@ function previewHandler() {
     item.classList.remove('outline', 'overflow');
     item.scrollTop = 0;
   });
+  _ele.overflowLines.forEach(line => line.hidden = true);
   return true;
 }
 
@@ -120,17 +141,28 @@ function init() {
       const role = res.role.split(' ').join('-');
       document.querySelector('title').textContent = `JGraston-Resume_${role}`;
     }
+    return res;
+  }).then(res => {
     renderHeader(res);
     if (res.summary) document.querySelector('.summary > p').textContent = res.summary;
     renderExperience(res);
     renderProficiency(res);
+  }).then( () => {
     window.addEventListener('keydown', keys, false);
     _ele.padPage.value = _ele.page.computedStyleMap().get('padding-bottom').value;
     _ele.padPage.addEventListener('change', pagePaddingChangeHandler);
     _ele.padPage.addEventListener('focus', pagePaddingFocusHandler);
+    _ele.padPage.addEventListener('overflowChange', function(e) {
+      this.value = e.detail.value;
+    });
     _ele.preview.addEventListener('click', previewHandler);
     _ele.overflowLines.forEach((line, idx) => {
-      new Draggable(line, `line${idx}`, [_ele.padPage]);
+      new Draggable(line, `line${idx}`, [line, _ele.padPage]);
+      line.dataset.overflow = _ele.page.computedStyleMap().get('padding-bottom').value;
+      line.addEventListener('overflowChange', function(e) {
+        this.dataset.overflow = e.detail.value;
+        getOverflow(this.nextElementSibling);
+      });
     });
     _ele.toggleButtons.forEach(button => button.addEventListener('click', toggleButtonHandler));
     _ele.exportButtons.forEach(button => button.addEventListener('click', exportHandler));

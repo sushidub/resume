@@ -1,6 +1,6 @@
 'use strict';
 
-import { debug } from './jshelprs.js';
+import { Trigger_Event, debug } from './jshelprs.js';
 
 export default class Draggable {
  
@@ -33,6 +33,7 @@ export default class Draggable {
       track(event.pageY);
       let padTotal = this.startPad + this.movement;
       this.targetEle.style.paddingBottom = `${padTotal}px`;
+      this.updateListeners(padTotal);
     }
 
     const onMove = (event) => {
@@ -88,6 +89,12 @@ export default class Draggable {
   }
 
   updateListeners(val) {
-    this.listeners.forEach(listener => listener.value = val);
+    this.listeners.forEach(listener => {
+      Trigger_Event('overflowChange', {
+        detail: {
+          'value': val
+        }
+      }, listener);
+    });
   }
 }
