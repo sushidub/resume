@@ -90,7 +90,7 @@ export default function renderProficiency(data) {
   console.info('%cfn: renderProficiency', debug.fn);
   
   const contentPlaceholder = document.querySelector('proficiency-section'); // Nodelist
-  const proficiencyData = data.proficiency; // Object
+  const proficiencyData = data; // Object
 
   if (!proficiencyData || proficiencyData.length === 0) {
     console.warn("proficiency section missing. see data.proficiency: %o", data.proficiency);
@@ -105,5 +105,7 @@ export default function renderProficiency(data) {
     }
   }
 
-  return customElements.define('proficiency-section', ProficiencySection);
+  if (!customElements.get('proficiency-section')) {
+    customElements.define('proficiency-section', ProficiencySection);
+  }
 }

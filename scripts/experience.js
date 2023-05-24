@@ -58,7 +58,7 @@ class ExperienceItem extends HTMLElement {
 
   connectedCallback() {
     console.log('experience element added to page.\n%O', this);
-    this.dragdropListener(this);
+    // this.dragdropListener(this);
   }
 
   createDescriptionNodes(data) {
@@ -204,6 +204,8 @@ export default function renderExperience(data) {
       }
     }
   });
-  
-  return customElements.define('experience-item', ExperienceItem);
+
+  if (!customElements.get('experience-item')) {
+    customElements.define('experience-item', ExperienceItem);
+  }
 }

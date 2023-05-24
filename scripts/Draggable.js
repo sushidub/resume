@@ -12,16 +12,12 @@ export default class Draggable {
    *    - any directional constraints (e.g., up, down, left, right) during drag
    */
 
-  constructor(ele, stage = {}, listeners = [], name = "") {
+  constructor(ele, listeners = [], name = "") {
     console.info('%cclass: Draggable (%s)', debug.fn, name);
 
     this.ele = ele;
     this.name = name;
     this.listeners = listeners;
-
-    for (const [key, value] of Object.entries(stage)) {
-      this[key] = value;
-    }
 
     this.ele.onmousedown = this.onmousedown.bind(this);
 
@@ -39,13 +35,8 @@ export default class Draggable {
     this.updateListeners(event);
 
     const moveAt = (event) => {
+      console.info('%cfn: moveAt', debug.fn);
       this.updateListeners(event);
-      // console.info('%cfn: moveAt', debug.fn);
-      this.ele.style.top = (event.pageY -  this.targetEleTop) + 'px';
-      track(event.pageY);
-      let padTotal = this.startPad + this.movement;
-      this.targetEle.style.paddingBottom = `${padTotal}px`;
-      this.updateListeners(padTotal);
     }
 
     const onMove = (event) => {
@@ -76,13 +67,9 @@ export default class Draggable {
     this.ele.onmouseout = onmouseout;
   }
 
-  updateListeners(val) {
+  updateListeners(event) {
     this.listeners.forEach(listener => {
-      Trigger_Event('overflowChange', {
-        detail: {
-          'value': val
-        }
-      }, listener);
+      listener(event);
     });
   }
 }

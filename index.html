@@ -49,7 +49,7 @@
     </div>
 
     <!-- printable document -->
-    <page id="page1" class="page outline">
+    <page class="page outline">
       <hr class="overflow-line at-start no-print" data-overflow="null">
       <div class="page-content outline">
         <header-section></header-section>
@@ -58,32 +58,28 @@
           <p></p>
         </section>
         <proficiency-section bar="true" layout="column" title="Proficiency"></proficiency-section>
-        <experience-item bar="true" layout="column" title="Experience" draggable="true"></experience-item>
+        <experience-item bar="true" layout="column" title="Experience"></experience-item>
       </div>
     </page>
-    <page id="page2" class="page outline">
+    <page class="page outline">
       <hr class="overflow-line at-start no-print" data-overflow="null">
       <div class="page-content outline">
         <header-section></header-section>
         <experience-item overflow="false" bar="true" layout="column" title="Experience con't..."></experience-item>
-        <experience-item layout="span" draggable="true"></experience-item>
-        <experience-item layout="span" draggable="true"></experience-item>
-        <experience-item layout="span" draggable="true"></experience-item>
+        <experience-item layout="span"></experience-item>
+        <experience-item layout="span"></experience-item>
+        <experience-item layout="span"></experience-item>
       </div>
     </page>
 
     <!-- helper utilities -->
     <div class="help no-print">
-      <label>Mask
-        <input type="number" id="padPage" value="" step="5" />
-      </label>
       <input type="button" class="toggle-button" value="(g) Guides" data-keycode="KeyG" />
       <input type="button" class="toggle-button" value="(n) Page Numbers" data-keycode="KeyN" />
       <input type="button" class="toggle-button" value="(p) End of Page" data-keycode="KeyP" />
       <input type="button" class="toggle-button" value="(b) Page Borders" data-keycode="KeyB" />
       <input type="button" class="toggle-button" value="(o) Show Overflow" data-keycode="KeyO" />
       <input type="button" id="documentPreview" value="Document Preview" />
-      <input type="button" class="export-button" data-export-type="json" value="JSON" />
     </div>
 
     <script type="module" src="scripts/main.js" defer></script>
