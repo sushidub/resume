@@ -39,7 +39,7 @@
       <hr class="page-marker" style="top:calc(11in - 1px)" />
       <hr class="page-marker" style="top:calc(22in - 1px)" />
     </div>
-    <div class="guides no-print">
+    <div class="guides no-print" hidden>
       <hr class="guide guide-label-pos-r" data-content="0.75in" style="left:0" />
       <hr class="guide guide-label-pos-r" data-content="1.875in" style="left:var(--page-gutter);" />
       <hr class="guide guide-label-pos-m" data-content="0.125in" style="left:calc(var(--page-gutter) + var(--content-side-w))" />
@@ -49,41 +49,39 @@
     </div>
 
     <!-- printable document -->
-    <page id="page1" class="page outline">
+    <page class="page outline">
       <hr class="overflow-line at-start no-print" data-overflow="null">
       <div class="page-content outline">
         <header-section></header-section>
-        <section class="column-layout summary" contenteditable>
-          <h3 class="bar bar-side">Summary</h3>
-          <p></p>
+        <section class="summary">
+          <h3>Summary</h3>
+          <p contenteditable></p>
         </section>
-        <proficiency-section bar="true" layout="column" title="Proficiency"></proficiency-section>
-        <experience-item bar="true" layout="column" title="Experience" draggable="true"></experience-item>
+        <proficiency-section bar="true" title="Proficiency"></proficiency-section>
+        <experience-item bar="true" title="Experience"></experience-item>
       </div>
     </page>
-    <page id="page2" class="page outline">
+    <page class="page outline">
       <hr class="overflow-line at-start no-print" data-overflow="null">
       <div class="page-content outline">
         <header-section></header-section>
-        <experience-item overflow="false" bar="true" layout="column" title="Experience con't..."></experience-item>
-        <experience-item layout="span" draggable="true"></experience-item>
-        <experience-item layout="span" draggable="true"></experience-item>
-        <experience-item layout="span" draggable="true"></experience-item>
+        <experience-item overflow="false" bar="true" title="Experience con't..."></experience-item>
+        <experience-item></experience-item>
+        <experience-item></experience-item>
+        <experience-item></experience-item>
+        <experience-item></experience-item>
       </div>
     </page>
 
     <!-- helper utilities -->
     <div class="help no-print">
-      <label>Mask
-        <input type="number" id="padPage" value="" step="5" />
-      </label>
       <input type="button" class="toggle-button" value="(g) Guides" data-keycode="KeyG" />
       <input type="button" class="toggle-button" value="(n) Page Numbers" data-keycode="KeyN" />
       <input type="button" class="toggle-button" value="(p) End of Page" data-keycode="KeyP" />
       <input type="button" class="toggle-button" value="(b) Page Borders" data-keycode="KeyB" />
       <input type="button" class="toggle-button" value="(o) Show Overflow" data-keycode="KeyO" />
       <input type="button" id="documentPreview" value="Document Preview" />
-      <input type="button" class="export-button" data-export-type="json" value="JSON" />
+      <input type="button" id="printDocument" value="Print" onclick="window.print()" />
     </div>
 
     <script type="module" src="scripts/main.js" defer></script>

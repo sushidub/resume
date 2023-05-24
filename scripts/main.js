@@ -8,13 +8,16 @@ import renderProficiency from './proficiency.js';
 console.info('%cmain.js', debug.fn);
 
 const _ele = {
+  exportButtons: document.querySelectorAll('.export-button'),
+  guides: document.querySelector('.guides'),
+  main: document.querySelector('main'),
+  overflowLines: document.querySelectorAll('.overflow-line'),
+  pages: document.querySelectorAll('page'),
+  pageContent: document.querySelectorAll('.page-content'),
+  pageNumbers: document.querySelector('.page-markers'),
   padPage: document.getElementById('padPage'),
   preview: document.getElementById('documentPreview'),
-  exportButtons: document.querySelectorAll('.export-button'),
-  main: document.querySelector('main'),
-  pageNumbers: document.querySelector('.page-markers'),
-  overflowLines: document.querySelectorAll('.overflow-line'),
-  guides: document.querySelector('.guides'),
+  summary: document.querySelector('.summary'),
   toggleButtons: document.querySelectorAll('.toggle-button')
 }
 const _keyListeners = ['KeyG', 'KeyN', 'KeyP', 'KeyB', 'KeyO'];
@@ -70,30 +73,10 @@ function keys(e) {
   }
 }
 
+let _pageCount = 0;
 function newPage() {
-  _pageCount = _pageCount++;
+  _pageCount = _pageCount + 1;
   return _pageCount;
-}
-
-function pagePaddingChangeHandler(e) {
-  console.info('%cfn: pagePaddingChangeHandler', debug.fn);
-  _ele.page.style.paddingBottom = this.value + 'px';
-  return true;
-}
-
-function pagePaddingFocusHandler(e) {
-  console.info('%cfn: pagePaddingFocusHandler', debug.fn);
-  _ele.pageContent.forEach(contentItem => {
-    contentItem.classList.add('outline');
-    contentItem.querySelector('.overflow-line').hidden = false;
-  });
-  this.addEventListener('blur', function blurHandler() {
-    _ele.pageContent.forEach(contentItem => {
-      contentItem.classList.remove('outline');
-      contentItem.querySelector('.overflow-line').hidden = true;
-    });
-    return _ele.padPage.removeEventListener('blur', blurHandler);
-  });
 }
 
 function previewHandler() {
@@ -127,42 +110,35 @@ function init() {
   });
   result.then(res => {
     console.log(res);
+    
     if (res.role) {
       const role = res.role.split(' ').join('-');
       document.querySelector('title').textContent = `JGraston-Resume_${role}`;
     }
-    return res;
-  }).then(res => {
-    const page = renderPage(res, newPage());
-    return res;
-  }).then(res => {
-    console.log(res);
-    console.log(page.contentBottom());
-    if (res.summary && !document.querySelector('.summary')) {
-      renderSummary(res.summary);
-    }
-      // if (data.proficiency && !document.querySelector('.proficiency')) renderProficiency(data.proficiency);
-      // renderExperience(data);
-  }).then( () => {
 
-    // listeners
+    if (_ele.pages) {
+      _ele.pages.forEach(page => renderPage(page, res, newPage()));
+    }
+
+    if (res.summary) {
+      if (_ele.summary) {
+         _ele.summary.lastElementChild.textContent = res.summary.value;
+       } else {
+         renderSummary(res.summary.value);
+       }
+     }
+ 
+     if (res.proficiency) {
+       renderProficiency(res.proficiency);
+     }
+     
+     renderExperience(res);
+
+      // listeners
     window.addEventListener('keydown', keys, false);
-    _ele.padPage.addEventListener('change', pagePaddingChangeHandler);
-    _ele.padPage.addEventListener('focus', pagePaddingFocusHandler);
-    _ele.padPage.addEventListener('overflowChange', function(e) {
-      this.value = e.detail.value;
-    });
     _ele.preview.addEventListener('click', previewHandler);
-    _ele.overflowLines.forEach((line, idx) => {
-      new Draggable(line, `line${idx}`, [line, _ele.padPage]);
-      line.dataset.overflow = _ele.page.computedStyleMap().get('padding-bottom').value;
-      line.addEventListener('overflowChange', function(e) {
-        this.dataset.overflow = e.detail.value;
-        getOverflow(this.nextElementSibling);
-      });
-    });
     _ele.toggleButtons.forEach(button => button.addEventListener('click', toggleButtonHandler));
-    _ele.exportButtons.forEach(button => button.addEventListener('click', exportHandler));
+
   });
 }
 

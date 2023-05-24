@@ -16,15 +16,13 @@ class ExperienceItem extends HTMLElement {
       const parser = new DOMParser();
       const header = parser.parseFromString(res, 'text/html');
       const template = header.getElementById('experience-item-template').content.cloneNode(true);
-      
-      // console.dir(this);
 
-      if (this._bar && this._title) {
+      if (this._title) {
         template.querySelector('section').prepend(this.createSectionTitle(this._title));
         template.querySelector('article').classList.add('bar');
+      } else {
+        template.querySelector('section').prepend(this.wrapElement(null, 'div')); 
       }
-
-      template.querySelector('section').classList.add(`${this._layout}-layout`);
 
       if (this._data.aside) {
         let asideEle;
@@ -35,7 +33,12 @@ class ExperienceItem extends HTMLElement {
             break;
           case 'side':
             asideEle = this.createSideAside(this._data.aside);
-            template.querySelector('section').prepend(asideEle);
+            if (this._title) {
+              const nodes = [template.querySelector('section').firstElementChild, asideEle];
+              template.querySelector('section').prepend(this.wrapElement(nodes, 'div'));
+            } else {
+              template.querySelector('section').firstElementChild.append(asideEle);
+            }
             break;
         }
       }
@@ -52,13 +55,12 @@ class ExperienceItem extends HTMLElement {
 
       if (this._overflow === "true") template.querySelector('.header').remove();
       
-      this.append(template);
+      this.replaceWith(template);
     });
   }
 
   connectedCallback() {
-    console.log('experience element added to page.\n%O', this);
-    this.dragdropListener(this);
+    console.log('%cfn: connectedCallback\n%O', debug.fn, this);
   }
 
   createDescriptionNodes(data) {
@@ -122,6 +124,8 @@ class ExperienceItem extends HTMLElement {
       'type': 'side'
     });
 
+    newNode.setAttribute('contenteditable', '');
+
     const asideTitleNode = Create_New_Element('h4', {
       'class': 'title'
     });
@@ -149,6 +153,17 @@ class ExperienceItem extends HTMLElement {
       'class': 'bar bar-side'
     });
     newNode.textContent = data;
+
+    fragment.append(newNode);
+    return fragment;
+  }
+
+  wrapElement(nodes, eltype) {
+    const fragment = new DocumentFragment();
+    let newNode;
+
+    newNode = Create_New_Element(eltype);
+    if (nodes) nodes.forEach(node => newNode.append(node));
 
     fragment.append(newNode);
     return fragment;
@@ -196,6 +211,9 @@ export default function renderExperience(data) {
 
   contentPlaceholders.forEach((place, idx) => {
     const experienceItemData = experienceItems[idx]; // incoming experience item index match
+    if (!experienceItemData) {
+      return place.remove();
+    }
     place._data = experienceItemData;
 
     if (place.hasAttributes) {
@@ -204,6 +222,8 @@ export default function renderExperience(data) {
       }
     }
   });
-  
-  return customElements.define('experience-item', ExperienceItem);
+
+  if (!customElements.get('experience-item')) {
+    customElements.define('experience-item', ExperienceItem);
+  }
 }

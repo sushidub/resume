@@ -38,11 +38,24 @@ h5.title {
   font-size: 9pt;
   line-height: 14pt;
 }
+header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  gap: var(--content-gutter-w);
+  width: 100%;
+}
 header .applicant {
+  flex: 0 0 auto;
   font-weight: normal;
   font-size: 17pt;
   line-height: 16pt;
   margin-top: 0.035in;
+  width: var(--content-side-w);
+}
+header .content {
+  flex: 0 0 auto;
+  width: var(--content-main-w);
 }
 header address {
   display: flex;
@@ -258,23 +271,19 @@ page.outline {
 .overflow-line.at-start::after {
   background-color: var(--color-turq);
 }
-.column-layout {
+section {
   display: flex;
   flex-flow: row nowrap;
+  align-items: flex-start;
   width: 100%;
   gap: var(--content-gutter-w);
   margin-top: 0.25in;
 }
-.column-layout > :first-child {
+section > :first-child {
   flex: 0 0 var(--content-side-w);
 }
-.column-layout > :last-child {  
+section > :last-child {  
   flex: 0 0 var(--content-main-w);
-}
-.span-layout {
-  width: var(--content-main-w);
-  margin-top: 0.25in;
-  margin-left: auto;
 }
 .experience .header .small {
   font-weight: 300;
@@ -312,16 +321,13 @@ page.outline {
   font-size: 9pt;
   line-height: 16pt;
 }
-experience-item {
-  display: block;
-}
 
-.skills {
-  /* display: flex;
+.proficiency > article {
+  display: flex;
   flex-flow: row wrap;
-  gap: 12px; */
 }
-.skills .keywords {
+.proficiency .keywords {
+  flex: 1 1 auto;
   list-style-type: none;
   font-weight: 300;
   font-size: 8.5pt;
@@ -330,21 +336,21 @@ experience-item {
   -epub-hyphens:manual; 
   margin-bottom: 0.075in;
 }
-.skills .keywords::before {
+.proficiency .keywords::before {
   content: attr(data-title);
   display: block;
   font-weight: 500;
   font-size: 9pt;
   line-height: 14pt;
 }
-.skills .keywords > li {
+.proficiency .keywords > li {
   display: inline;
   font-weight: 400;
 }
-.skills .keywords > li:not(:last-of-type)::after {
+.proficiency .keywords > li:not(:last-of-type)::after {
   /* content: "\002C "; */
 }
-.skills .keywords[data-title="Applied"] > li:last-of-type::after {
+.proficiency .keywords[data-title="Applied"] > li:last-of-type::after {
   content: ".";
 }
 .client-roster > li {
@@ -384,6 +390,9 @@ experience-item {
   height: 0.02in;
   max-height: 0.02in;
   background-color: #333;
+}
+.bar-side:not(.summary .bar-side) {
+  margin-bottom: 0.25in;
 }
 .bar-side::before {
   width: 0.25in;
@@ -495,12 +504,28 @@ experience-item {
 .guides > .guide.guide-label-pos-m::after {
   transform: translate(-50%, 10px);
 }
+[contenteditable] {
+  position: relative;
+}
+[contenteditable]::after {
+  content: "";
+  position: absolute;
+  height: 0.03in;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: transparent;
+}
+[contenteditable]:focus-visible::after {
+  background-color: #ff63ff;
+}
+[contenteditable]:hover {
+  background-color: #ffdfff;
+}
 [contenteditable]:focus-visible {
-  background-color: #FAFAFA;
-  outline-color: var(--color-coral, red);
-  outline-style: solid;
-  outline-offset: -1px;
-  outline-width: 2px;
+  background-color: #fff1ff;
+  outline: none;
 }
 ::selection { 
   color: var(--color-bg);

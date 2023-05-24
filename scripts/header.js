@@ -53,13 +53,10 @@ class HeaderSection extends HTMLElement {
   }
 }
 
-export default function renderHeader(obj) {
+export default function renderHeader(el, data) {
   console.info('%cfn: renderHeader', debug.fn);
 
-  const contentPlaceholder = obj.template.querySelector('header-section'); // Nodelist
-  const data = obj.data;
-
-  contentPlaceholder._data = {
+  el._data = {
     'role': data.role,
     'links': data.links,
     'applicant': data.applicant,
@@ -69,5 +66,7 @@ export default function renderHeader(obj) {
     'address2': data.address2 
   };
 
-  customElements.define('header-section', HeaderSection);
+  if (!customElements.get('header-section')) {
+    customElements.define('header-section', HeaderSection);
+  }
 }

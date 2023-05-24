@@ -11,13 +11,13 @@ class ProficiencySection extends HTMLElement {
     const templateString = fetch('templates/proficiency.html').then((res) => {
       if (res.ok) return res.text();
     });
+
     templateString.then((res) => {
       const parser = new DOMParser();
       const header = parser.parseFromString(res, 'text/html');
       const template = header.getElementById('proficiency-section-template').content.cloneNode(true);
-      // console.dir(this);
 
-      if (this._bar && this._title) {
+      if (this._title) {
         template.querySelector('section').prepend(this.createSectionTitle(this._title));
         template.querySelector('article').classList.add('bar');
       }
@@ -30,9 +30,12 @@ class ProficiencySection extends HTMLElement {
         template.querySelector('article').append(this.createDescriptionNodes(this._data.description));
       }
 
-      template.querySelector('section').classList.add(`${this._layout}-layout`);
       this.replaceWith(template);
     });
+  }
+
+  connectedCallback() {
+    console.log('%cfn: connectedCallback\n%O', debug.fn, this);
   }
 
   createDescriptionNodes(data) {
@@ -90,7 +93,7 @@ export default function renderProficiency(data) {
   console.info('%cfn: renderProficiency', debug.fn);
   
   const contentPlaceholder = document.querySelector('proficiency-section'); // Nodelist
-  const proficiencyData = data.proficiency; // Object
+  const proficiencyData = data; // Object
 
   if (!proficiencyData || proficiencyData.length === 0) {
     console.warn("proficiency section missing. see data.proficiency: %o", data.proficiency);
@@ -105,5 +108,7 @@ export default function renderProficiency(data) {
     }
   }
 
-  return customElements.define('proficiency-section', ProficiencySection);
+  if (!customElements.get('proficiency-section')) {
+    customElements.define('proficiency-section', ProficiencySection);
+  }
 }
