@@ -138,7 +138,6 @@ function init() {
     window.addEventListener('keydown', keys, false);
     _ele.preview.addEventListener('click', previewHandler);
     _ele.toggleButtons.forEach(button => button.addEventListener('click', toggleButtonHandler));
-
   });
 }
 

@@ -104,6 +104,5 @@ export default function renderPage(el, data, num = 0) {
   ['role', 'applicant', 'phone', 'email', 'address1', 'address2', 'links'].forEach(item => {
     _data[item] = data[item];
   });
-
   return new DocumentPage(el, _data, num);
 }
