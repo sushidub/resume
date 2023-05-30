@@ -1,21 +1,16 @@
 'use strict';
 
 import { Create_New_Element, Iterate, KebabClass, debug } from './jshelprs.js';
+import { fetchTemplate } from './main.js';
 
 console.info('%cexperience.js', debug.fn);
 
-class ExperienceItem extends HTMLElement {
+class ExperienceSection extends HTMLElement {
   constructor() {
     super();
 
-    const templateString = fetch('templates/experience.html').then((res) => {
-      if (res.ok) return res.text();
-    });
-
-    templateString.then((res) => {
-      const parser = new DOMParser();
-      const header = parser.parseFromString(res, 'text/html');
-      const template = header.getElementById('experience-item-template').content.cloneNode(true);
+    const fetchResponse = fetchTemplate('experience-section');
+    fetchResponse.then(template => {
 
       if (this._title) {
         template.querySelector('section').prepend(this.createSectionTitle(this._title));
@@ -54,7 +49,7 @@ class ExperienceItem extends HTMLElement {
       }
 
       if (this._overflow === "true") template.querySelector('.header').remove();
-      
+        
       this.replaceWith(template);
     });
   }
@@ -69,7 +64,6 @@ class ExperienceItem extends HTMLElement {
       let descriptionItem;
       if (item.startsWith("•")) {
         item = item.split('• ')[1];
-        console.log(item);
         descriptionItem = Create_New_Element('p', {'class': 'list-item'});
       } else {
         descriptionItem = Create_New_Element('p');
@@ -198,7 +192,7 @@ class ExperienceItem extends HTMLElement {
 export default function renderExperience(data) {
   console.info('%cfn: renderExperience', debug.fn);
   
-  const contentPlaceholders = document.querySelectorAll('experience-item'); // Nodelist
+  const contentPlaceholders = document.querySelectorAll('experience-section'); // Nodelist
   const experienceItems = data.experience; // Array
   
   const hidden = experienceItems.findIndex(item => item.hide === true);
@@ -223,7 +217,7 @@ export default function renderExperience(data) {
     }
   });
 
-  if (!customElements.get('experience-item')) {
-    customElements.define('experience-item', ExperienceItem);
+  if (!customElements.get('experience-section')) {
+    customElements.define('experience-section', ExperienceSection);
   }
 }

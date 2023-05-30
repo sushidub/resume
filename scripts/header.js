@@ -1,24 +1,24 @@
 'use strict';
 
 import { Create_New_Element, debug } from './jshelprs.js';
+import { fetchTemplate } from './main.js';
 
 console.info('%cheader.js', debug.fn);
 
 class HeaderSection extends HTMLElement {
   constructor() {
     super();
-    const templateString = fetch('templates/header.html').then((res) => {
-      if (res.ok) return res.text();
-    });
-    templateString.then((res) => {
-      const parser = new DOMParser();
-      const header = parser.parseFromString(res, 'text/html');
-      const template = header.getElementById('header-section-template').content.cloneNode(true);
+
+    const fetchResponse = fetchTemplate('header-section');
+    fetchResponse.then(template => {
+      console.log(template);
       ['applicant', 'phone', 'email', 'address1', 'address2'].forEach(item => {
         template.querySelector(`[role="${item}"]`).textContent = this._data[item];
       });
+
       if (this._data.role) template.querySelector('.content').append(this.createRoleNode(this._data.role));
       if (this._data.links) template.querySelector('.links').append(this.createLinkNodes(this._data.links));
+
       this.replaceWith(template);
     });
   }

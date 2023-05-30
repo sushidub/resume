@@ -21,8 +21,8 @@ const _ele = {
   toggleButtons: document.querySelectorAll('.toggle-button')
 }
 const _keyListeners = ['KeyG', 'KeyN', 'KeyP', 'KeyB', 'KeyO'];
-const _role = 'senior-frontend-developer';
-
+const _role = 'creative-technologist';
+let _data = null;
 
 function getStyle(el, prop) {
   return el.computedStyleMap().get(prop).value;
@@ -74,9 +74,14 @@ function keys(e) {
 }
 
 let _pageCount = 0;
-function newPage() {
+function createPage(el = null) {
+  console.info('%cfn: createPage', debug.fn);
   _pageCount = _pageCount + 1;
-  return _pageCount;
+
+  if (el instanceof HTMLElement) return renderPage(el, _data, _pageCount);
+
+  const page = fetchTemplate('document-page');
+  page.then(template => renderPage(template, _data, _pageCount));
 }
 
 function previewHandler() {
@@ -106,18 +111,19 @@ function toggleButtonHandler(e) {
 
 function init() {
   let result = fetch(`/data/${_role}.json`).then((res) => {
-    return res.json();
+    if (res.ok) return res.json();
   });
   result.then(res => {
     console.log(res);
-    
+    _data = res;
+
     if (res.role) {
       const role = res.role.split(' ').join('-');
       document.querySelector('title').textContent = `JGraston-Resume_${role}`;
     }
 
     if (_ele.pages) {
-      _ele.pages.forEach(page => renderPage(page, res, newPage()));
+      _ele.pages.forEach(page => createPage(page));
     }
 
     if (res.summary) {
@@ -139,6 +145,18 @@ function init() {
     _ele.preview.addEventListener('click', previewHandler);
     _ele.toggleButtons.forEach(button => button.addEventListener('click', toggleButtonHandler));
   });
+}
+
+export async function fetchTemplate(templateName) {
+  const response = fetch(`templates/${templateName}.html`).then((res) => {
+    if (res.ok) return res.text();
+  }).then(res => {
+    const parser = new DOMParser();
+    const fragment = parser.parseFromString(res, 'text/html');
+    console.log(templateName, fragment);
+    return fragment.getElementById(`${templateName}-template`).content.cloneNode(true);
+  });
+  return response;
 }
 
 // `DOMContentLoaded` may fire before your script has a chance to run, so check before adding a listener

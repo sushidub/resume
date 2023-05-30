@@ -1,6 +1,7 @@
 'use strict';
 
 import { Create_New_Element, debug } from './jshelprs.js';
+import { fetchTemplate } from './main.js';
 
 console.info('%cproficiency.js', debug.fn);
 
@@ -8,14 +9,8 @@ class ProficiencySection extends HTMLElement {
   constructor() {
     super();
 
-    const templateString = fetch('templates/proficiency.html').then((res) => {
-      if (res.ok) return res.text();
-    });
-
-    templateString.then((res) => {
-      const parser = new DOMParser();
-      const header = parser.parseFromString(res, 'text/html');
-      const template = header.getElementById('proficiency-section-template').content.cloneNode(true);
+    const fetchResponse = fetchTemplate('proficiency-section');
+    fetchResponse.then(template => {
 
       if (this._title) {
         template.querySelector('section').prepend(this.createSectionTitle(this._title));
@@ -25,7 +20,7 @@ class ProficiencySection extends HTMLElement {
       this._data.categories.forEach(cat => {
         template.querySelector('article').append(this.createCategoryList(cat));
       });
-      
+        
       if (this._data.description && this._data.description.length > 0) {
         template.querySelector('article').append(this.createDescriptionNodes(this._data.description));
       }

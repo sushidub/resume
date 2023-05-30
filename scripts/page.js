@@ -98,7 +98,7 @@ class DocumentPage {
 
 export default function renderPage(el, data, num = 0) {
   console.info('%cfn: renderPage\nnum: %d', debug.fn, num);
-  
+  console.log(data);
   const _data = {};
   
   ['role', 'applicant', 'phone', 'email', 'address1', 'address2', 'links'].forEach(item => {

@@ -277,7 +277,7 @@ section {
   align-items: flex-start;
   width: 100%;
   gap: var(--content-gutter-w);
-  margin-top: 0.25in;
+  margin-top: 0.15in;
 }
 section > :first-child {
   flex: 0 0 var(--content-side-w);
@@ -379,7 +379,7 @@ section > :last-child {
   position: relative;
   margin: 0;
   padding: 0;
-  padding-top: 0.1125in;
+  padding-top: 0.15in;
 }
 .bar::before {
   content: "";
